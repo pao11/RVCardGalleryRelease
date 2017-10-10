@@ -1,8 +1,6 @@
 package com.view.pao11.library;
 
 import android.content.Context;
-import android.support.v7.widget.LinearSnapHelper;
-import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
 import android.view.View;
@@ -37,12 +35,10 @@ public class CardScaleHelper {
     private SnapHelper mSnapHelper;
 
     public void attachToRecyclerView(final RecyclerView mRecyclerView) {
-        // 开启log会影响滑动体验, 调试时才开启
-//        LogUtils.mLogEnable = false;
         this.mRecyclerView = mRecyclerView;
         mContext = mRecyclerView.getContext();
         if (mSnapHelperType == PAGER_SNAP_HELPER) {
-            mSnapHelper = new PagerSnapHelper();
+            mSnapHelper = new CardPagerSnapHelper();
         } else {
             mSnapHelper = new CardLinearSnapHelper();
         }
@@ -65,7 +61,6 @@ public class CardScaleHelper {
                 // dx>0则表示右滑, dx<0表示左滑, dy<0表示上滑, dy>0表示下滑
                 mCurrentItemOffset += dx;
                 computeCurrentItemPos();
-//                LogUtils.v(String.format("dx=%s, dy=%s, mScrolledX=%s", dx, dy, mCurrentItemOffset));
                 onScrolledChangedCallback();
             }
         });
@@ -116,7 +111,6 @@ public class CardScaleHelper {
             int tempPos = mCurrentItemPos;
 
             mCurrentItemPos = mCurrentItemOffset / mOnePageWidth;
-//            LogUtils.d(String.format("=======onCurrentItemPos Changed======= tempPos=%s, mCurrentItemPos=%s", tempPos, mCurrentItemPos));
         }
     }
 
@@ -127,7 +121,6 @@ public class CardScaleHelper {
         int offset = mCurrentItemOffset - mCurrentItemPos * mOnePageWidth;
         float percent = (float) Math.max(Math.abs(offset) * 1.0 / mOnePageWidth, 0.0001);
 
-//        LogUtils.d(String.format("offset=%s, percent=%s", offset, percent));
         View leftView = null;
         View currentView;
         View rightView = null;
