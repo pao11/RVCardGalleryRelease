@@ -27,6 +27,11 @@ new CardScaleHelper().attachToRecyclerView(mRecyclerView);
 mCardAdapterHelper.onCreateViewHolder(parent, itemView);
 mCardAdapterHelper.onBindViewHolder(holder.itemView, position, getItemCount());
 ```
+
+## Apk download
+![app_debug.apk](https://github.com/pao11/RVCardGalleryRelease/blob/master/art/app-debug.apk?raw=true)
+
+
 ##更新记录
  
  **v1.0.0**　`2017.10.10`　发布第一个版本
