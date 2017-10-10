@@ -1,7 +1,10 @@
 package com.view.pao11.library;
 
 import android.content.Context;
+import android.support.v7.widget.LinearSnapHelper;
+import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SnapHelper;
 import android.view.View;
 
 
@@ -9,6 +12,10 @@ import android.view.View;
  * Created by pao11 on 8/30/17.
  */
 public class CardScaleHelper {
+
+    public static final int PAGER_SNAP_HELPER = 0;
+    public static final int LINEAR_SNAP_HELPER = 1;
+
     private RecyclerView mRecyclerView;
     private Context mContext;
 
@@ -23,21 +30,32 @@ public class CardScaleHelper {
     private int mCurrentItemPos;
     private int mCurrentItemOffset;
 
-    private CardLinearSnapHelper mLinearSnapHelper = new CardLinearSnapHelper();
+    private int mSnapHelperType = PAGER_SNAP_HELPER;
+
+//    private CardLinearSnapHelper mLinearSnapHelper = new CardLinearSnapHelper();
+//    private PagerSnapHelper mPagerSnapHelper = new PagerSnapHelper();
+    private SnapHelper mSnapHelper;
 
     public void attachToRecyclerView(final RecyclerView mRecyclerView) {
         // 开启log会影响滑动体验, 调试时才开启
 //        LogUtils.mLogEnable = false;
         this.mRecyclerView = mRecyclerView;
         mContext = mRecyclerView.getContext();
+        if (mSnapHelperType == PAGER_SNAP_HELPER) {
+            mSnapHelper = new PagerSnapHelper();
+        } else {
+            mSnapHelper = new CardLinearSnapHelper();
+        }
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    mLinearSnapHelper.mNoNeedToScroll = mCurrentItemOffset == 0 || mCurrentItemOffset == getDestItemOffset(mRecyclerView.getAdapter().getItemCount() - 1);
-                } else {
-                    mLinearSnapHelper.mNoNeedToScroll = false;
+                if (mSnapHelperType == LINEAR_SNAP_HELPER) {
+                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                        ((CardLinearSnapHelper)mSnapHelper).mNoNeedToScroll = mCurrentItemOffset == 0 || mCurrentItemOffset == getDestItemOffset(mRecyclerView.getAdapter().getItemCount() - 1);
+                    } else {
+                        ((CardLinearSnapHelper)mSnapHelper).mNoNeedToScroll = false;
+                    }
                 }
             }
 
@@ -53,7 +71,7 @@ public class CardScaleHelper {
         });
 
         initWidth();
-        mLinearSnapHelper.attachToRecyclerView(mRecyclerView);
+        mSnapHelper.attachToRecyclerView(mRecyclerView);
     }
 
     /**
@@ -145,5 +163,9 @@ public class CardScaleHelper {
 
     public void setShowLeftCardWidth(int showLeftCardWidth) {
         mShowLeftCardWidth = showLeftCardWidth;
+    }
+
+    public void setSnapHelperType(int mSnapHelperType) {
+        this.mSnapHelperType = mSnapHelperType;
     }
 }
