@@ -16,6 +16,7 @@ import android.view.View;
 
 public class CardPagerSnapHelper extends SnapHelper {
 
+    public boolean mNoNeedToScroll = false;
     static final float MILLISECONDS_PER_INCH = 100f;
     private static final int MAX_SCROLL_ON_FLING_DURATION = 100; // ms
 
@@ -38,18 +39,23 @@ public class CardPagerSnapHelper extends SnapHelper {
     public int[] calculateDistanceToFinalSnap(@NonNull RecyclerView.LayoutManager layoutManager,
                                               @NonNull View targetView) {
         int[] out = new int[2];
-        if (layoutManager.canScrollHorizontally()) {
-            out[0] = distanceToCenter(layoutManager, targetView,
-                    getHorizontalHelper(layoutManager));
-        } else {
+        if (mNoNeedToScroll) {
             out[0] = 0;
-        }
-
-        if (layoutManager.canScrollVertically()) {
-            out[1] = distanceToCenter(layoutManager, targetView,
-                    getVerticalHelper(layoutManager));
-        } else {
             out[1] = 0;
+        } else {
+            if (layoutManager.canScrollHorizontally()) {
+                out[0] = distanceToCenter(layoutManager, targetView,
+                        getHorizontalHelper(layoutManager));
+            } else {
+                out[0] = 0;
+            }
+
+            if (layoutManager.canScrollVertically()) {
+                out[1] = distanceToCenter(layoutManager, targetView,
+                        getVerticalHelper(layoutManager));
+            } else {
+                out[1] = 0;
+            }
         }
         return out;
     }

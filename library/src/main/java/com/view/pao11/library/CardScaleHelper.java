@@ -29,8 +29,9 @@ public class CardScaleHelper {
     private int mCurrentItemOffset;
 
     private int mSnapHelperType = PAGER_SNAP_HELPER;
+    private boolean isSmoothScroll;
 
-//    private CardLinearSnapHelper mLinearSnapHelper = new CardLinearSnapHelper();
+    //    private CardLinearSnapHelper mLinearSnapHelper = new CardLinearSnapHelper();
 //    private PagerSnapHelper mPagerSnapHelper = new PagerSnapHelper();
     private SnapHelper mSnapHelper;
 
@@ -48,9 +49,15 @@ public class CardScaleHelper {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (mSnapHelperType == LINEAR_SNAP_HELPER) {
                     if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                        ((CardLinearSnapHelper)mSnapHelper).mNoNeedToScroll = mCurrentItemOffset == 0 || mCurrentItemOffset == getDestItemOffset(mRecyclerView.getAdapter().getItemCount() - 1);
+                        ((CardLinearSnapHelper) mSnapHelper).mNoNeedToScroll = mCurrentItemOffset == 0 || mCurrentItemOffset == getDestItemOffset(mRecyclerView.getAdapter().getItemCount() - 1);
                     } else {
-                        ((CardLinearSnapHelper)mSnapHelper).mNoNeedToScroll = false;
+                        ((CardLinearSnapHelper) mSnapHelper).mNoNeedToScroll = false;
+                    }
+                } else {
+                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                        ((CardPagerSnapHelper) mSnapHelper).mNoNeedToScroll = mCurrentItemOffset == 0 || mCurrentItemOffset == getDestItemOffset(mRecyclerView.getAdapter().getItemCount() - 1);
+                    } else {
+                        ((CardPagerSnapHelper) mSnapHelper).mNoNeedToScroll = false;
                     }
                 }
             }
@@ -79,16 +86,28 @@ public class CardScaleHelper {
                 mCardGalleryWidth = mRecyclerView.getWidth();
                 mCardWidth = mCardGalleryWidth - ScreenUtil.dip2px(mContext, 2 * (mPagePadding + mShowLeftCardWidth));
                 mOnePageWidth = mCardWidth;
-                mRecyclerView.smoothScrollToPosition(mCurrentItemPos);
+                if (isSmoothScroll) {
+                    mRecyclerView.smoothScrollToPosition(mCurrentItemPos);
+                } else if (mCurrentItemPos > 0) {
+                    mRecyclerView.scrollBy(mOnePageWidth * mCurrentItemPos, 0);
+                }
                 onScrolledChangedCallback();
             }
         });
     }
 
+    /**
+     *
+     * @param currentItemPos 该值从1开始
+     */
     public void setCurrentItemPos(int currentItemPos) {
-        this.mCurrentItemPos = currentItemPos;
+        this.mCurrentItemPos = currentItemPos > 0 ? currentItemPos - 1 : 0;
     }
 
+    /**
+     *
+     * @return 返回值从0开始
+     */
     public int getCurrentItemPos() {
         return mCurrentItemPos;
     }
@@ -158,7 +177,19 @@ public class CardScaleHelper {
         mShowLeftCardWidth = showLeftCardWidth;
     }
 
+    /**
+     *
+     * @param mSnapHelperType
+     */
     public void setSnapHelperType(int mSnapHelperType) {
         this.mSnapHelperType = mSnapHelperType;
+    }
+
+    /**
+     *
+     * @param smoothScroll
+     */
+    public void setSmoothScroll(boolean smoothScroll) {
+        isSmoothScroll = smoothScroll;
     }
 }

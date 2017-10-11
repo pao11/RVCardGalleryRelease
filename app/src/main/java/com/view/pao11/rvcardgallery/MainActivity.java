@@ -56,6 +56,7 @@ public class MainActivity extends Activity {
         // mRecyclerView绑定scale效果
         mCardScaleHelper = new CardScaleHelper();
         mCardScaleHelper.setCurrentItemPos(2);
+//        mCardScaleHelper.setSmoothScroll(true);
 //        mCardScaleHelper.setSnapHelperType(CardScaleHelper.LINEAR_SNAP_HELPER);
         mCardScaleHelper.attachToRecyclerView(mRecyclerView);
 
@@ -70,6 +71,7 @@ public class MainActivity extends Activity {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     notifyBackgroundChange();
+                    System.out.println("=============" + mCardScaleHelper.getCurrentItemPos());
                 }
             }
         });
@@ -80,7 +82,7 @@ public class MainActivity extends Activity {
     private void notifyBackgroundChange() {
         if (mLastPos == mCardScaleHelper.getCurrentItemPos()) return;
         mLastPos = mCardScaleHelper.getCurrentItemPos();
-        final int resId = mList.get(mCardScaleHelper.getCurrentItemPos());
+        final int resId = mList.get(mLastPos);
         mBlurView.removeCallbacks(mBlurRunnable);
         mBlurRunnable = new Runnable() {
             @Override
