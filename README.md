@@ -8,7 +8,7 @@ RecyclerView实现Card Gallery效果，替代ViewPager方案。能够快速滑�
 
 ## Gradle 添加引用
 ```
-compile 'com.github.pao11:RVCardGalleryRelease:v1.5.0' 
+compile 'com.github.pao11:RVCardGalleryRelease:v1.6.0' 
 ```
 
 ## Usage
@@ -29,7 +29,6 @@ mCardScaleHelper.attachToRecyclerView(mRecyclerView);
 
 //初始化数据后请调用
 mCardScaleHelper.setCurrentItemPosWithNotify(3);//初始化后默认显示的图片
-adapter.notifyDataSetChanged();
 
 ```
 
@@ -44,6 +43,8 @@ mCardAdapterHelper.onBindViewHolder(holder.itemView, position, getItemCount());
 
 
 ##更新记录
+
+ **v1.6.0**　`2017.10.12`　发布第六个版本--SDK VERSION 24.2.0（优化代码稳定性）
 
  **v1.5.0**　`2017.10.12`　发布第五个版本--SDK VERSION 24.2.0（修复一些闪退bug）
 

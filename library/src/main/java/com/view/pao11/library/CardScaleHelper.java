@@ -1,6 +1,7 @@
 package com.view.pao11.library;
 
 import android.content.Context;
+import android.os.SystemClock;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
 import android.view.View;
@@ -89,8 +90,9 @@ public class CardScaleHelper {
                 mCardGalleryWidth = mRecyclerView.getWidth();
                 mCardWidth = mCardGalleryWidth - ScreenUtil.dip2px(mContext, 2 * (mPagePadding + mShowLeftCardWidth));
                 mOnePageWidth = mCardWidth;
-                if (mRecyclerView.getAdapter().getItemCount() < mCurrentItemPos) {
-                    mCurrentItemPos = mRecyclerView.getAdapter().getItemCount();
+                int itemCount = mRecyclerView.getAdapter().getItemCount();
+                if (itemCount < mCurrentItemPos) {
+                    mCurrentItemPos = itemCount > 0 ? itemCount - 1 : 0;
                 }
                 if (isSmoothScroll) {
                     mRecyclerView.smoothScrollToPosition(mCurrentItemPos);
@@ -111,6 +113,7 @@ public class CardScaleHelper {
 
     /**
      * 设置默认显示图片并初始化数据
+     * 此方法内部会调用RecyclerView.getAdapter().notifyDataSetChanged();
      *
      * @param currentItemPos 该值从1开始
      */
@@ -118,14 +121,21 @@ public class CardScaleHelper {
         final int lastPos = mCurrentItemPos;
         this.mCurrentItemPos = currentItemPos > 0 ? currentItemPos - 1 : 0;
         if (mRecyclerView != null) {
+            int itemCount = mRecyclerView.getAdapter().getItemCount();
+            if (itemCount < mCurrentItemPos) {
+                mCurrentItemPos = itemCount > 0 ? itemCount - 1 : 0;
+            }
             mRecyclerView.post(new Runnable() {
                 @Override
                 public void run() {
+                    mRecyclerView.getAdapter().notifyDataSetChanged();
+
                     if (isSmoothScroll) {
                         mRecyclerView.smoothScrollToPosition(mCurrentItemPos);
                     } else {
                         mRecyclerView.scrollBy(mOnePageWidth * (mCurrentItemPos - lastPos), 0);
                     }
+
                     onScrolledChangedCallback();
                 }
             });

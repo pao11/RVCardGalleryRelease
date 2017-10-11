@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -68,8 +69,8 @@ public class MainActivity extends Activity {
                         mList.add(R.drawable.pic6);
                     }
                 }
-                mCardScaleHelper.setCurrentItemPosWithNotify(3);
-                adapter.notifyDataSetChanged();
+                mCardScaleHelper.setCurrentItemPosWithNotify(20);
+
                 notifyBackgroundChange();
             }
         });
