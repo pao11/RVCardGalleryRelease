@@ -36,6 +36,9 @@ public class CardScaleHelper {
     private SnapHelper mSnapHelper;
 
     public void attachToRecyclerView(final RecyclerView mRecyclerView) {
+        if (this.mRecyclerView == mRecyclerView) {
+            return; // nothing to do
+        }
         this.mRecyclerView = mRecyclerView;
         mContext = mRecyclerView.getContext();
         if (mSnapHelperType == PAGER_SNAP_HELPER) {
@@ -86,6 +89,9 @@ public class CardScaleHelper {
                 mCardGalleryWidth = mRecyclerView.getWidth();
                 mCardWidth = mCardGalleryWidth - ScreenUtil.dip2px(mContext, 2 * (mPagePadding + mShowLeftCardWidth));
                 mOnePageWidth = mCardWidth;
+                if (mRecyclerView.getAdapter().getItemCount() < mCurrentItemPos) {
+                    mCurrentItemPos = mRecyclerView.getAdapter().getItemCount();
+                }
                 if (isSmoothScroll) {
                     mRecyclerView.smoothScrollToPosition(mCurrentItemPos);
                 } else if (mCurrentItemPos > 0) {
@@ -97,7 +103,6 @@ public class CardScaleHelper {
     }
 
     /**
-     *
      * @param currentItemPos 该值从1开始
      */
     public void setCurrentItemPos(int currentItemPos) {
@@ -105,7 +110,29 @@ public class CardScaleHelper {
     }
 
     /**
+     * 设置默认显示图片并初始化数据
      *
+     * @param currentItemPos 该值从1开始
+     */
+    public void setCurrentItemPosWithNotify(int currentItemPos) {
+        final int lastPos = mCurrentItemPos;
+        this.mCurrentItemPos = currentItemPos > 0 ? currentItemPos - 1 : 0;
+        if (mRecyclerView != null) {
+            mRecyclerView.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (isSmoothScroll) {
+                        mRecyclerView.smoothScrollToPosition(mCurrentItemPos);
+                    } else {
+                        mRecyclerView.scrollBy(mOnePageWidth * (mCurrentItemPos - lastPos), 0);
+                    }
+                    onScrolledChangedCallback();
+                }
+            });
+        }
+    }
+
+    /**
      * @return 返回值从0开始
      */
     public int getCurrentItemPos() {
@@ -178,7 +205,6 @@ public class CardScaleHelper {
     }
 
     /**
-     *
      * @param mSnapHelperType
      */
     public void setSnapHelperType(int mSnapHelperType) {
@@ -186,7 +212,6 @@ public class CardScaleHelper {
     }
 
     /**
-     *
      * @param smoothScroll
      */
     public void setSmoothScroll(boolean smoothScroll) {

@@ -8,7 +8,7 @@ RecyclerView实现Card Gallery效果，替代ViewPager方案。能够快速滑�
 
 ## Gradle 添加引用
 ```
-compile 'com.github.pao11:RVCardGalleryRelease:v1.3.0' 
+compile 'com.github.pao11:RVCardGalleryRelease:v1.5.0' 
 ```
 
 ## Usage
@@ -17,7 +17,8 @@ compile 'com.github.pao11:RVCardGalleryRelease:v1.3.0'
 ```
 final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
 mRecyclerView.setLayoutManager(linearLayoutManager);
-mRecyclerView.setAdapter(new CardAdapter());
+adapter = new CardAdapter();
+mRecyclerView.setAdapter(adapter);
 
 // mRecyclerView绑定scale效果
 mCardScaleHelper = new CardScaleHelper();
@@ -25,6 +26,11 @@ mCardScaleHelper.setCurrentItemPos(2);//设置默认显示图片为第二张
 mCardScaleHelper.setSmoothScroll(true);//设置默认显示图片为第二张时是否带有动画滚动效果
 mCardScaleHelper.setSnapHelperType(CardScaleHelper.LINEAR_SNAP_HELPER);//一次Fling时，滑动多张或一张
 mCardScaleHelper.attachToRecyclerView(mRecyclerView);
+
+//初始化数据后请调用
+mCardScaleHelper.setCurrentItemPosWithNotify(3);//初始化后默认显示的图片
+adapter.notifyDataSetChanged();
+
 ```
 
 在adapter相应的位置调用
@@ -38,6 +44,8 @@ mCardAdapterHelper.onBindViewHolder(holder.itemView, position, getItemCount());
 
 
 ##更新记录
+
+ **v1.5.0**　`2017.10.12`　发布第五个版本--SDK VERSION 24.2.0（修复一些闪退bug）
 
  **v1.3.0**　`2017.10.12`　发布第四个版本--SDK VERSION 24.2.0（增加默认显示图片位置及是否带有滚动动画）
 

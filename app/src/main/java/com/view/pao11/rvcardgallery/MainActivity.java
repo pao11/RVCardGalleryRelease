@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.view.pao11.rvcardgallery.util.BlurBitmapUtils;
@@ -43,22 +44,35 @@ public class MainActivity extends Activity {
     }
 
     private void init() {
-        for (int i = 0; i < 10; i++) {
-            mList.add(R.drawable.pic4);
-            mList.add(R.drawable.pic5);
-            mList.add(R.drawable.pic6);
-        }
+
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         mRecyclerView.setLayoutManager(linearLayoutManager);
-        mRecyclerView.setAdapter(new CardAdapter(mList));
+        final CardAdapter adapter = new CardAdapter(mList);
+        mRecyclerView.setAdapter(adapter);
         // mRecyclerView绑定scale效果
         mCardScaleHelper = new CardScaleHelper();
-        mCardScaleHelper.setCurrentItemPos(2);
+//        mCardScaleHelper.setCurrentItemPos(2);
 //        mCardScaleHelper.setSmoothScroll(true);
 //        mCardScaleHelper.setSnapHelperType(CardScaleHelper.LINEAR_SNAP_HELPER);
         mCardScaleHelper.attachToRecyclerView(mRecyclerView);
+
+        ((Button)findViewById(R.id.btn_go)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mList.size() == 0) {
+                    for (int i = 0; i < 10; i++) {
+                        mList.add(R.drawable.pic4);
+                        mList.add(R.drawable.pic5);
+                        mList.add(R.drawable.pic6);
+                    }
+                }
+                mCardScaleHelper.setCurrentItemPosWithNotify(3);
+                adapter.notifyDataSetChanged();
+                notifyBackgroundChange();
+            }
+        });
 
         initBlurBackground();
     }
@@ -80,18 +94,20 @@ public class MainActivity extends Activity {
     }
 
     private void notifyBackgroundChange() {
-        if (mLastPos == mCardScaleHelper.getCurrentItemPos()) return;
-        mLastPos = mCardScaleHelper.getCurrentItemPos();
-        final int resId = mList.get(mLastPos);
-        mBlurView.removeCallbacks(mBlurRunnable);
-        mBlurRunnable = new Runnable() {
-            @Override
-            public void run() {
-                Bitmap bitmap = BitmapFactory.decodeResource(getResources(), resId);
-                ViewSwitchUtils.startSwitchBackgroundAnim(mBlurView, BlurBitmapUtils.getBlurBitmap(mBlurView.getContext(), bitmap, 15));
-            }
-        };
-        mBlurView.postDelayed(mBlurRunnable, 500);
+        if (mList.size() > 0) {
+            if (mLastPos == mCardScaleHelper.getCurrentItemPos()) return;
+            mLastPos = mCardScaleHelper.getCurrentItemPos();
+            final int resId = mList.get(mLastPos);
+            mBlurView.removeCallbacks(mBlurRunnable);
+            mBlurRunnable = new Runnable() {
+                @Override
+                public void run() {
+                    Bitmap bitmap = BitmapFactory.decodeResource(getResources(), resId);
+                    ViewSwitchUtils.startSwitchBackgroundAnim(mBlurView, BlurBitmapUtils.getBlurBitmap(mBlurView.getContext(), bitmap, 15));
+                }
+            };
+            mBlurView.postDelayed(mBlurRunnable, 500);
+        }
     }
 
 }
