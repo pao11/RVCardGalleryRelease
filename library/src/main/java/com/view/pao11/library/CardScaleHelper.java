@@ -51,15 +51,21 @@ public class CardScaleHelper {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    mCurrentItemPos = mRecyclerView.getChildAdapterPosition(mSnapHelper.findSnapView(mRecyclerView.getLayoutManager()));
+                    onScrolledChangedCallback();
+                }
                 if (mSnapHelperType == LINEAR_SNAP_HELPER) {
                     if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                        ((CardLinearSnapHelper) mSnapHelper).mNoNeedToScroll = mCurrentItemOffset == 0 || mCurrentItemOffset == getDestItemOffset(mRecyclerView.getAdapter().getItemCount() - 1);
+//                        ((CardLinearSnapHelper) mSnapHelper).mNoNeedToScroll = mCurrentItemOffset == 0 || mCurrentItemOffset == getDestItemOffset(mRecyclerView.getAdapter().getItemCount() - 1);
+                        ((CardLinearSnapHelper) mSnapHelper).mNoNeedToScroll = mCurrentItemPos == 0 || mCurrentItemPos == mRecyclerView.getAdapter().getItemCount() - 1;
                     } else {
                         ((CardLinearSnapHelper) mSnapHelper).mNoNeedToScroll = false;
                     }
                 } else {
                     if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                        ((CardPagerSnapHelper) mSnapHelper).mNoNeedToScroll = mCurrentItemOffset == 0 || mCurrentItemOffset == getDestItemOffset(mRecyclerView.getAdapter().getItemCount() - 1);
+//                        ((CardPagerSnapHelper) mSnapHelper).mNoNeedToScroll = mCurrentItemOffset == 0 || mCurrentItemOffset == getDestItemOffset(mRecyclerView.getAdapter().getItemCount() - 1);
+                        ((CardPagerSnapHelper) mSnapHelper).mNoNeedToScroll = mCurrentItemPos == 0 || mCurrentItemPos == mRecyclerView.getAdapter().getItemCount() - 1;
                     } else {
                         ((CardPagerSnapHelper) mSnapHelper).mNoNeedToScroll = false;
                     }
@@ -74,6 +80,7 @@ public class CardScaleHelper {
                 computeCurrentItemPos();
                 onScrolledChangedCallback();
             }
+
         });
 
         initWidth();
@@ -160,12 +167,12 @@ public class CardScaleHelper {
         if (mOnePageWidth <= 0) return;
         boolean pageChanged = false;
         // 滑动超过一页说明已翻页
-        if (Math.abs(mCurrentItemOffset - mCurrentItemPos * mOnePageWidth) >= mOnePageWidth) {
+        // 乐视手机回翻图片时mCurrentItemOffset-mCurrentItemPos * mOnePageWidth比mOnePageWidth少1.
+        if (Math.abs(mCurrentItemOffset - mCurrentItemPos * mOnePageWidth) >= mOnePageWidth - 1) {
             pageChanged = true;
         }
         if (pageChanged) {
-            int tempPos = mCurrentItemPos;
-
+//            int tempPos = mCurrentItemPos;
             mCurrentItemPos = mCurrentItemOffset / mOnePageWidth;
         }
     }

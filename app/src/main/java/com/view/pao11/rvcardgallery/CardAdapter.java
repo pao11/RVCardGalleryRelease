@@ -38,6 +38,7 @@ class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
             @Override
             public void onClick(View view) {
 //                ToastUtils.show(holder.mImageView.getContext(), "" + position);
+                System.out.println("=================click==" + position);
             }
         });
     }

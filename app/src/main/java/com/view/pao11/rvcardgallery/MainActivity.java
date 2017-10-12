@@ -55,8 +55,8 @@ public class MainActivity extends Activity {
         // mRecyclerView绑定scale效果
         mCardScaleHelper = new CardScaleHelper();
 //        mCardScaleHelper.setCurrentItemPos(2);
-//        mCardScaleHelper.setSmoothScroll(true);
-//        mCardScaleHelper.setSnapHelperType(CardScaleHelper.LINEAR_SNAP_HELPER);
+        mCardScaleHelper.setSmoothScroll(true);
+        mCardScaleHelper.setSnapHelperType(CardScaleHelper.LINEAR_SNAP_HELPER);
         mCardScaleHelper.attachToRecyclerView(mRecyclerView);
 
         ((Button)findViewById(R.id.btn_go)).setOnClickListener(new View.OnClickListener() {

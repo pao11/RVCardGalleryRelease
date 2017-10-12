@@ -8,8 +8,8 @@ android {
         applicationId "com.view.pao11.rvcardgallery"
         minSdkVersion 11
         targetSdkVersion 24
-        versionCode 6
-        versionName "1.6.0"
+        versionCode 7
+        versionName "1.7.0"
 
         //启用renderscript
         renderscriptTargetApi = 18
