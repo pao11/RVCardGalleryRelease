@@ -168,12 +168,12 @@ public class CardScaleHelper {
         boolean pageChanged = false;
         // 滑动超过一页说明已翻页
         // 乐视手机回翻图片时mCurrentItemOffset-mCurrentItemPos * mOnePageWidth比mOnePageWidth少1.
-        if (Math.abs(mCurrentItemOffset - mCurrentItemPos * mOnePageWidth) >= mOnePageWidth - 1) {
+        if (Math.abs(mCurrentItemOffset - mCurrentItemPos * mOnePageWidth) >= mOnePageWidth - 5) {
             pageChanged = true;
         }
         if (pageChanged) {
 //            int tempPos = mCurrentItemPos;
-            mCurrentItemPos = mCurrentItemOffset / mOnePageWidth;
+            mCurrentItemPos = (mCurrentItemOffset + 5) / mOnePageWidth;
         }
     }
 

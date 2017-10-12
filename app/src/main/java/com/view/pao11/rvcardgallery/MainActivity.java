@@ -55,15 +55,15 @@ public class MainActivity extends Activity {
         // mRecyclerView绑定scale效果
         mCardScaleHelper = new CardScaleHelper();
 //        mCardScaleHelper.setCurrentItemPos(2);
-        mCardScaleHelper.setSmoothScroll(true);
-        mCardScaleHelper.setSnapHelperType(CardScaleHelper.LINEAR_SNAP_HELPER);
+//        mCardScaleHelper.setSmoothScroll(true);
+//        mCardScaleHelper.setSnapHelperType(CardScaleHelper.LINEAR_SNAP_HELPER);
         mCardScaleHelper.attachToRecyclerView(mRecyclerView);
 
         ((Button)findViewById(R.id.btn_go)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mList.size() == 0) {
-                    for (int i = 0; i < 10; i++) {
+                    for (int i = 0; i < 1; i++) {
                         mList.add(R.drawable.pic4);
                         mList.add(R.drawable.pic5);
                         mList.add(R.drawable.pic6);
