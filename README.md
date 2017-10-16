@@ -1,5 +1,6 @@
 [![](https://jitpack.io/v/pao11/RVCardGalleryRelease.svg)](https://jitpack.io/#pao11/RVCardGalleryRelease)
 [![Travis](https://img.shields.io/badge/Gradle-2.3.1-brightgreen.svg)]()
+[![Travis](https://img.shields.io/badge/Gradle--Wrapper-gradle--3.3--all-blue.svg)]()
 
 # RecyclerViewCardGalleryRelease
 
